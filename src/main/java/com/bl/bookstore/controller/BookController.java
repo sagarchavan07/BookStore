@@ -2,8 +2,9 @@ package com.bl.bookstore.controller;
 
 import com.bl.bookstore.dto.BookDTO;
 import com.bl.bookstore.dto.ResponseDTO;
-import com.bl.bookstore.service.BookStoreService;
+import com.bl.bookstore.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,45 +13,53 @@ import org.springframework.web.bind.annotation.*;
 public class BookController {
 
     @Autowired
-    BookStoreService bookStoreService;
+    BookService bookService;
 
     @RequestMapping(value = {"", "/"})
     public ResponseEntity<ResponseDTO> hello(){
-        return bookStoreService.welcomeMessage();
+        ResponseDTO responseDTO = new ResponseDTO("GET call success", "Welcome to Book Store Application");
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     @PostMapping("/insert")
-    public ResponseEntity<ResponseDTO> insertBook(@RequestBody BookDTO bookDTO){
-        return bookStoreService.insertBook(bookDTO);
+    public ResponseEntity<ResponseDTO> insertBook(@RequestHeader(name = "Authorization") String token, @RequestBody BookDTO bookDTO){
+        ResponseDTO responseDTO = new ResponseDTO("Inserted new Book", bookService.insertBook(token, bookDTO));
+        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/get/all")
     public ResponseEntity<ResponseDTO> getAllBooks(){
-        return bookStoreService.getAllBooks();
+        ResponseDTO responseDTO = new ResponseDTO("GET call Success", bookService.getAllBooks());
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<ResponseDTO> getBookById(@PathVariable long id){
-        return bookStoreService.getBookById(id);
+    public ResponseEntity<ResponseDTO> getBookById(@RequestHeader(name = "Authorization") String token, @PathVariable long id){
+        ResponseDTO responseDTO = new ResponseDTO("GET call Success", bookService.getBookById(token, id));
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     @GetMapping("/get")
-    public ResponseEntity<ResponseDTO> searchBookByName(@RequestParam String name){
-        return bookStoreService.getBookByName(name);
+    public ResponseEntity<ResponseDTO> searchBookByName(@RequestHeader(name = "Authorization") String token, @RequestParam String bookName){
+        ResponseDTO responseDTO = new ResponseDTO("GET call Success", bookService.getBookByName(token, bookName));
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ResponseDTO> deleteBookById(@PathVariable long id){
-        return bookStoreService.deleteBookById(id);
+    public ResponseEntity<ResponseDTO> deleteBookById(@RequestHeader(name = "Authorization") String token, @PathVariable long id){
+        ResponseDTO responseDTO = new ResponseDTO("Book deleted", bookService.deleteBookById(token, id));
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ResponseDTO> updateBookById(@PathVariable long id, @RequestBody BookDTO bookDTO){
-        return bookStoreService.updateBookById(id, bookDTO);
+    public ResponseEntity<ResponseDTO> updateBookById(@RequestHeader(name = "Authorization") String token, @PathVariable long id, @RequestBody BookDTO bookDTO){
+        ResponseDTO responseDTO = new ResponseDTO("Book Updated", bookService.updateBookById(token, id, bookDTO));
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     @PutMapping("/updatequantity")
-    public ResponseEntity<ResponseDTO> updateQuantity(@RequestParam long id, long quantity){
-        return bookStoreService.updateQuantity(id, quantity);
+    public ResponseEntity<ResponseDTO> updateQuantity(@RequestHeader(name = "Authorization") String token, @RequestParam long id, long quantity){
+        ResponseDTO responseDTO = new ResponseDTO("Book quantity updated", bookService.updateQuantity(token, id, quantity));
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 }

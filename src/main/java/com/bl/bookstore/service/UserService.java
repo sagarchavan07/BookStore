@@ -27,7 +27,7 @@ public class UserService {
         if (userRepository.findByEmail(userDTO.getEmail()) == null) {
             UserData userData = new UserData(userDTO);
             userData = userRepository.save(userData);
-            String token = tokenUtility.generateToken(userData.getUserID(),userData.getPassword());
+            String token = tokenUtility.generateToken(userData.getUserID());
             userData.setToken(token);
             return userRepository.save(userData);
         } else
