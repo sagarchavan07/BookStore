@@ -1,6 +1,7 @@
 package com.bl.bookstore.service;
 
 import com.bl.bookstore.dto.BookDTO;
+import com.bl.bookstore.email.EmailService;
 import com.bl.bookstore.exception.BookStoreException;
 import com.bl.bookstore.model.Book;
 import com.bl.bookstore.model.UserData;
@@ -21,13 +22,17 @@ public class BookService {
     UserRepository userRepository;
     @Autowired
     TokenUtility tokenUtility;
+    @Autowired
+    EmailService emailService;
 
     public Book insertBook(String token, BookDTO bookDTO) {
         long userId = tokenUtility.decodeToken(token);
         UserData user = userRepository.findById(userId).orElseThrow(() -> new BookStoreException("tokens do not match the user"));
         if (user.isAdmin()) {
-            return bookRepository.save(new Book(bookDTO));
-        } else throw new BookStoreException("User is not Admin");
+            Book book =  bookRepository.save(new Book(bookDTO));
+            emailService.sendEmail(user.getEmail(), "new book added", "new book if id "+ book.getBookId()+" is added to book Store by "+ user.getFirstName()+" "+user.getLastName() +". \nBook Details:\n"+book);
+            return book;
+        } else throw new BookStoreException("User is not an Admin");
     }
 
     public List<Book> getAllBooks() {
