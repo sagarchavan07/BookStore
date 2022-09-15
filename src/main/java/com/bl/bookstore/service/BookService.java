@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class BookService {
+public class BookService implements IBookService{
 
     @Autowired
     BookRepository bookRepository;
@@ -30,7 +30,7 @@ public class BookService {
         UserData user = userRepository.findById(userId).orElseThrow(() -> new BookStoreException("tokens do not match the user"));
         if (user.isAdmin()) {
             Book book =  bookRepository.save(new Book(bookDTO));
-            emailService.sendEmail(user.getEmail(), "new book added", "new book if id "+ book.getBookId()+" is added to book Store by "+ user.getFirstName()+" "+user.getLastName() +". \nBook Details:\n"+book);
+            emailService.sendEmail(user.getEmail(), "new book added", "new book if id "+ book.getBookId()+" is added to book Store by "+ user.getFirstName()+" "+user.getLastName() +". \nBook Details:\n"+book.toJson());
             return book;
         } else throw new BookStoreException("User is not an Admin");
     }
@@ -38,6 +38,17 @@ public class BookService {
     public List<Book> getAllBooks() {
         if (!bookRepository.findAll().isEmpty()) {
             return bookRepository.findAll();
+        } else throw new BookStoreException("Books Table is Empty!");
+    }
+
+    public List<Book> sortBooksAscending() {
+        if (!bookRepository.findAll().isEmpty()) {
+            return bookRepository.sortBooksAscending();
+        } else throw new BookStoreException("Books Table is Empty!");
+    }
+    public List<Book> sortBooksDescending() {
+        if (!bookRepository.findAll().isEmpty()) {
+            return bookRepository.sortBooksDescending();
         } else throw new BookStoreException("Books Table is Empty!");
     }
 
@@ -76,7 +87,7 @@ public class BookService {
 
     public Book updateQuantity(String token, long bookId, long quantity) {
         long userId = tokenUtility.decodeToken(token);
-        userRepository.findById(userId).orElseThrow(() -> new BookStoreException("tokens do not match the user"));
+        userRepository.findById(userId).orElseThrow(() -> new BookStoreException("tokens do not match to the user"));
         bookRepository.findById(bookId).orElseThrow(() -> new BookStoreException("Books id " + bookId + " not found!"));
         Book book = bookRepository.findBookById(bookId);
         book.setQuantity(quantity);

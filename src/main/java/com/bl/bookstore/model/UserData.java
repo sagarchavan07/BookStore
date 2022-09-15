@@ -10,8 +10,8 @@ import java.time.LocalDate;
 @Table(name = "users")
 public class UserData {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long userID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long userId;
     private String firstName;
     private String lastName;
     @NotNull
@@ -19,21 +19,19 @@ public class UserData {
     private String address;
     private LocalDate dob;
     private String password;
-    private String token;
     private boolean isAdmin;
     private boolean login;;
 
     public UserData() {
     }
 
-    public UserData(String firstName, String lastName, String email, String address, LocalDate dob, String token, String password) {
+    public UserData(String firstName, String lastName, String email, String address, LocalDate dob, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.address = address;
         this.dob = dob;
         this.password = password;
-        this.token = token;
     }
 
     public UserData(UserDTO userDTO) {
@@ -46,12 +44,12 @@ public class UserData {
         this.isAdmin = userDTO.isAdmin();
     }
 
-    public Long getUserID() {
-        return userID;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUserID(Long userID) {
-        this.userID = userID;
+    public void setUserId(Long userID) {
+        this.userId = userID;
     }
 
     public String getFirstName() {
@@ -102,14 +100,6 @@ public class UserData {
         this.password = password;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
     public boolean isAdmin() {
         return isAdmin;
     }
@@ -129,14 +119,13 @@ public class UserData {
     @Override
     public String toString() {
         return "UserData{" +
-                "userID=" + userID +
+                "userID=" + userId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", address='" + address + '\'' +
                 ", dob=" + dob +
                 ", password='" + password + '\'' +
-                ", token='" + token + '\'' +
                 ", isAdmin=" + isAdmin +
                 '}';
     }
