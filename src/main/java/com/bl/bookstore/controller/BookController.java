@@ -1,8 +1,10 @@
 package com.bl.bookstore.controller;
 
 import com.bl.bookstore.dto.BookDTO;
+import com.bl.bookstore.dto.CartDTO;
 import com.bl.bookstore.dto.ResponseDTO;
-import com.bl.bookstore.service.BookService;
+import com.bl.bookstore.service.CartService;
+import com.bl.bookstore.service.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class BookController {
 
     @Autowired
-    BookService bookService;
+    IBookService bookService;
 
     @RequestMapping(value = {"", "/"})
     public ResponseEntity<ResponseDTO> hello(){
@@ -30,6 +32,17 @@ public class BookController {
     @GetMapping("/get/all")
     public ResponseEntity<ResponseDTO> getAllBooks(){
         ResponseDTO responseDTO = new ResponseDTO("GET call Success", bookService.getAllBooks());
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+    @GetMapping("/get/asce")
+    public ResponseEntity<ResponseDTO> sortBooksAscending(){
+        ResponseDTO responseDTO = new ResponseDTO("GET call Success", bookService.sortBooksAscending());
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/get/desc")
+    public ResponseEntity<ResponseDTO> sortBooksDescending(){
+        ResponseDTO responseDTO = new ResponseDTO("GET call Success", bookService.sortBooksDescending());
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
@@ -62,4 +75,5 @@ public class BookController {
         ResponseDTO responseDTO = new ResponseDTO("Book quantity updated", bookService.updateQuantity(token, id, quantity));
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
+
 }

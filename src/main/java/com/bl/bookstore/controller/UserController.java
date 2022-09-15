@@ -2,7 +2,7 @@ package com.bl.bookstore.controller;
 
 import com.bl.bookstore.dto.ResponseDTO;
 import com.bl.bookstore.dto.UserDTO;
-import com.bl.bookstore.service.UserService;
+import com.bl.bookstore.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/bookstore/user")
 public class UserController {
     @Autowired
-    UserService userService;
+    IUserService userService;
 
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO> registerUser(@RequestBody UserDTO userDTO){

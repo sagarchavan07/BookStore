@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Table(name = "books")
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookId;
     private String bookName;
     private String authorName;
@@ -107,5 +107,14 @@ public class Book {
                 ", price='" + price + '\'' +
                 ", quantity='" + quantity + '\'' +
                 '}';
+    }
+    public String toJson() {
+        return  "bookId: " + bookId +
+                ", \nbookName: " + bookName +
+                ", \nauthorName: " + authorName +
+                ", \nbookDescription: " + bookDescription +
+                ", \nbookImg: " + bookImg +
+                ", \nprice: " + price +
+                ", \nquantity: " + quantity ;
     }
 }

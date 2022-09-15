@@ -18,6 +18,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query(value = "select * from books book where book.book_id = :id",nativeQuery = true)
     Book findBookById(@Param("id") long id);
 
-//    @Query(value = "SELECT * from users u where u.email = :mail",nativeQuery = true)
-//    UserData findByEmail(@Param("mail") String mail);
+    @Query(value = "select * from books book order by book.book_name",nativeQuery = true)
+    List<Book> sortBooksAscending();
+    @Query(value = "select * from books book order by book.book_name desc",nativeQuery = true)
+    List<Book> sortBooksDescending();
 }
