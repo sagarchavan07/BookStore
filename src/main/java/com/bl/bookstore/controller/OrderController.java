@@ -21,9 +21,28 @@ public class OrderController {
         ResponseDTO responseDTO = new ResponseDTO("Order Placed Successfully", orderService.placeOrder(token,orderDTO));
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
+
     @GetMapping("/getall")
     public ResponseEntity<ResponseDTO> getAllOrders(@RequestHeader(name = "Authorization") String token){
-        ResponseDTO responseDTO = new ResponseDTO("GET Call Success", orderService.getAllOrders(token).toString());
+        ResponseDTO responseDTO = new ResponseDTO("GET Call Success", orderService.getAllOrders(token));
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/get/{orderId}")
+    public ResponseEntity<ResponseDTO> getOrderById(@RequestHeader(name = "Authorization") String token,@PathVariable long orderId){
+        ResponseDTO responseDTO = new ResponseDTO("GET Call Success", orderService.getOrderById(token,orderId));
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{orderId}")
+    public ResponseEntity<ResponseDTO> deleteOrderById(@RequestHeader(name = "Authorization") String token,@PathVariable long orderId){
+        ResponseDTO responseDTO = new ResponseDTO("GET Call Success", orderService.deleteOrderById(token,orderId));
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{orderId}")
+    public ResponseEntity<ResponseDTO> updateOrderById(@RequestHeader(name = "Authorization") String token,@PathVariable long orderId, @RequestBody OrderDTO orderDTO){
+        ResponseDTO responseDTO = new ResponseDTO("GET Call Success", orderService.updateOrderById(token,orderId,orderDTO));
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 }
