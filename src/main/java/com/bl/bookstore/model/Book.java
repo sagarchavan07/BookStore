@@ -14,14 +14,14 @@ public class Book {
     private String authorName;
     private String bookDescription;
     private String bookImg;
-    private String price;
+    private double price;
     private long quantity;
 
 
     public Book() {
     }
 
-    public Book(String bookName, String authorName, String bookDescription, String bookImg, String price, long quantity) {
+    public Book(String bookName, String authorName, String bookDescription, String bookImg, double price, long quantity) {
         this.bookName = bookName;
         this.authorName = authorName;
         this.bookDescription = bookDescription;
@@ -80,11 +80,11 @@ public class Book {
         this.bookImg = bookImg;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

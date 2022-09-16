@@ -33,10 +33,10 @@ public class CartService {
 
         for (int i = 0; i < bookIdList.size(); i++) {
             if (quantityList.get(i) > bookRepository.findBookById(bookIdList.get(i)).getQuantity())
-                throw new BookStoreException("Book quantity exceeded for book id "+ bookIdList.get(i));
+                throw new BookStoreException("Book quantity exceeded for book id " + bookIdList.get(i));
         }
         if (cartRepository.existsById(userId)) {
-            cart=cartRepository.findById(userId).orElseThrow(() -> new BookStoreException("User id " + userId + " not found"));
+            cart = cartRepository.findById(userId).orElseThrow(() -> new BookStoreException("User id " + userId + " not found"));
             cart.setUserData(userData);
             cart.setBookIdList(cartDTO.getBookIdList());
             cart.setQuantity(cartDTO.getQuantity());
@@ -46,11 +46,42 @@ public class CartService {
             try {
 
                 return cartRepository.save(cart);
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         return null;
     }
 
+    public List<Cart> getAllCarts(String token) {
+        long userId = tokenUtility.decodeToken(token);
+        UserData user = userRepository.findById(userId).orElseThrow(() -> new BookStoreException("User id " + userId + " not found"));
+        if (!user.isAdmin()) throw new BookStoreException("User is not Admin");
+        if (cartRepository.findAll().isEmpty()) throw new BookStoreException("No cart added yet");
+        return cartRepository.findAll();
+    }
+
+    public Cart getCartById(String token, long id) {
+        long userId = tokenUtility.decodeToken(token);
+        if (userId != id) throw new BookStoreException("Token is not matching with user id " + id);
+        UserData user = userRepository.findById(userId).orElseThrow(() -> new BookStoreException("User id " + userId + " not found"));
+        if (!user.isAdmin()) throw new BookStoreException("User is not Admin");
+        return cartRepository.findById(id).orElseThrow(() -> new BookStoreException("Cart og id " + userId + " not found"));
+    }
+
+    public String deleteCartById(String token, long id) {
+        long userId = tokenUtility.decodeToken(token);
+        if (userId != id) throw new BookStoreException("Token is not matching with user id " + id);
+        if (cartRepository.existsById(id)) {
+            cartRepository.deleteById(id);
+        } else throw new BookStoreException("cart not found of id " + id);
+        return "Cart deleted of id " + id;
+    }
+
+    public Cart UpdateCart(String token, CartDTO cartDTO, long cartId) {
+        long userId = tokenUtility.decodeToken(token);
+        if (userId == cartId) {
+            return addToCart(token, cartDTO);
+        } else throw new BookStoreException("cartId " + cartId + " not matching with token");
+    }
 }
