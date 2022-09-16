@@ -1,9 +1,7 @@
 package com.bl.bookstore.controller;
 
 import com.bl.bookstore.dto.BookDTO;
-import com.bl.bookstore.dto.CartDTO;
 import com.bl.bookstore.dto.ResponseDTO;
-import com.bl.bookstore.service.CartService;
 import com.bl.bookstore.service.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
