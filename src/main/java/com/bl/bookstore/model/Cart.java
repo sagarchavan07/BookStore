@@ -12,21 +12,23 @@ public class Cart {
     private UserData userData;
     @ElementCollection
     @CollectionTable(name = "cart_books",joinColumns = @JoinColumn(name = "cart_id"))
-    private List<Integer> BookIdList;
+    private List<Long> BookIdList;
     @ElementCollection
     @CollectionTable(name = "cart_book_quantity",joinColumns = @JoinColumn(name = "cart_id"))
-    private List<Integer> quantity;
+    private List<Long> quantities;
+    private double totalCartPrice;
 
-    public Cart(Long cartId, UserData userData, List<Integer> bookIdList, List<Integer> quantity) {
+    public Cart(Long cartId, UserData userData, List<Long> bookIdList, List<Long> quantities, double totalCartPrice) {
         this.cartId = cartId;
         this.userData = userData;
         BookIdList = bookIdList;
-        this.quantity = quantity;
+        this.quantities = quantities;
+        this.totalCartPrice = totalCartPrice;
     }
-    public Cart(UserData userData, List<Integer> bookIdList, List<Integer> quantity) {
+    public Cart(UserData userData, List<Long> bookIdList, List<Long> quantities) {
         this.userData = userData;
         BookIdList = bookIdList;
-        this.quantity = quantity;
+        this.quantities = quantities;
     }
 
     public Cart() {
@@ -49,20 +51,28 @@ public class Cart {
         this.userData = userData;
     }
 
-    public List<Integer> getBookIdList() {
+    public List<Long> getBookIdList() {
         return BookIdList;
     }
 
-    public void setBookIdList(List<Integer> bookIdList) {
+    public void setBookIdList(List<Long> bookIdList) {
         BookIdList = bookIdList;
     }
 
-    public List<Integer> getQuantity() {
-        return quantity;
+    public List<Long> getQuantities() {
+        return quantities;
     }
 
-    public void setQuantity(List<Integer> quantity) {
-        this.quantity = quantity;
+    public void setQuantities(List<Long> quantity) {
+        this.quantities = quantity;
+    }
+
+    public double getTotalCartPrice() {
+        return totalCartPrice;
+    }
+
+    public void setTotalCartPrice(double totalCartPrice) {
+        this.totalCartPrice = totalCartPrice;
     }
 
     @Override
@@ -71,7 +81,7 @@ public class Cart {
                 "cartId=" + cartId +
                 ", userData=" + userData +
                 ", BookIdList=" + BookIdList +
-                ", quantity=" + quantity +
+                ", quantity=" + quantities +
                 '}';
     }
 }

@@ -22,6 +22,12 @@ public class OrderController {
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
+    @PostMapping("/placeOrderByCart")
+    public ResponseEntity<ResponseDTO> placeOrderByCart(@RequestHeader(name = "Authorization") String token, @RequestParam long cartId){
+        ResponseDTO responseDTO = new ResponseDTO("Order Placed Successfully", orderService.placeOrderByCart(token,cartId));
+        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
+    }
+
     @GetMapping("/getall")
     public ResponseEntity<ResponseDTO> getAllOrders(@RequestHeader(name = "Authorization") String token){
         ResponseDTO responseDTO = new ResponseDTO("GET Call Success", orderService.getAllOrders(token));
