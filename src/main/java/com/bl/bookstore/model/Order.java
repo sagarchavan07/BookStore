@@ -2,6 +2,7 @@ package com.bl.bookstore.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -13,9 +14,12 @@ public class Order {
     @JoinColumn(name = "user_id")
     private UserData user;
     private String address;
-    @OneToOne
-    private Book book;
-    private long quantity;
+    @ElementCollection
+    @CollectionTable(name = "order_books", joinColumns = @JoinColumn(name = "order_id"))
+    private List<Long> bookIdList;
+    @ElementCollection
+    @CollectionTable(name = "order_book_quantities", joinColumns = @JoinColumn(name = "order_id"))
+    private List<Long> quantities;
     private double price;
     private LocalDate purchaseDate;
     private boolean isCanceled;
@@ -23,11 +27,11 @@ public class Order {
     public Order() {
     }
 
-    public Order(UserData user, String address, Book book, long quantity, double price, LocalDate purchaseDate) {
+    public Order(UserData user, String address, List<Long> bookIdList, List<Long> quantities, double price, LocalDate purchaseDate) {
         this.user = user;
         this.address = address;
-        this.book = book;
-        this.quantity = quantity;
+        this.bookIdList = bookIdList;
+        this.quantities = quantities;
         this.price = price;
         this.purchaseDate = purchaseDate;
     }
@@ -56,20 +60,20 @@ public class Order {
         this.address = address;
     }
 
-    public Book getBook() {
-        return book;
+    public List<Long> getBookIdList() {
+        return bookIdList;
     }
 
-    public void setBook(Book book) {
-        this.book = book;
+    public void setBookIdList(List<Long> book) {
+        this.bookIdList = book;
     }
 
-    public long getQuantity() {
-        return quantity;
+    public List<Long> getQuantities() {
+        return quantities;
     }
 
-    public void setQuantity(long quantity) {
-        this.quantity = quantity;
+    public void setQuantities(List<Long> quantity) {
+        this.quantities = quantity;
     }
 
     public double getPrice() {
@@ -102,8 +106,8 @@ public class Order {
                 "orderId=" + orderId +
                 ", user=" + user +
                 ", address='" + address + '\'' +
-                ", book=" + book +
-                ", quantity=" + quantity +
+                ", book=" + bookIdList +
+                ", quantity=" + quantities +
                 ", price=" + price +
                 ", purchaseDate=" + purchaseDate +
                 ", isCanceled=" + isCanceled +
