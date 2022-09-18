@@ -22,8 +22,8 @@ public class OrderController {
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
-    @PostMapping("/placeOrderByCart")
-    public ResponseEntity<ResponseDTO> placeOrderByCart(@RequestHeader(name = "Authorization") String token, @RequestParam long cartId){
+    @PostMapping("/placeOrderByCart/{cartId}")
+    public ResponseEntity<ResponseDTO> placeOrderByCart(@RequestHeader(name = "Authorization") String token, @PathVariable long cartId ){
         ResponseDTO responseDTO = new ResponseDTO("Order Placed Successfully", orderService.placeOrderByCart(token,cartId));
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
@@ -36,7 +36,7 @@ public class OrderController {
 
     @GetMapping("/get/{orderId}")
     public ResponseEntity<ResponseDTO> getOrderById(@RequestHeader(name = "Authorization") String token,@PathVariable long orderId){
-        ResponseDTO responseDTO = new ResponseDTO("GET Call Success", orderService.getOrderById(token,orderId));
+        ResponseDTO responseDTO = new ResponseDTO("GET Call Success", orderService.getOrderById(token,orderId).toString());
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
